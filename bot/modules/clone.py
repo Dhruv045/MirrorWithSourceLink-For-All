@@ -20,7 +20,7 @@ def _clone(message, bot, multi=0):
     buttons = ButtonMaker()
     if BOT_PM:
         try:
-            msg1 = f'Added your Requested link to Download\n'
+            msg1 = f'I have Added your Requested link to Download\n'
             send = bot.sendMessage(message.from_user.id, text=msg1)
             send.delete()
         except Exception as e:
@@ -30,7 +30,7 @@ def _clone(message, bot, multi=0):
             uname = f'<a href="tg://user?id={message.from_user.id}">{message.from_user.first_name}</a>'
             botstart = f"http://t.me/{b_uname}"
             buttons.buildbutton("Click Here to Start Me", f"{botstart}")
-            startwarn = f"Dear {uname},\n\n<b>I found that you haven't started me in PM (Private Chat) yet.</b>\n\n"
+            startwarn = f"Dear {uname},\n\n<b>Click on Below Button to Start me & then add your task here Again!</b>\n\n"
             message = sendMarkup(startwarn, bot, message, InlineKeyboardMarkup(buttons.build_menu(2)))
             Thread(target=auto_delete_message, args=(bot, message, message)).start()
             return
@@ -97,7 +97,7 @@ def _clone(message, bot, multi=0):
             sleep(4)
             Thread(target=_clone, args=(nextmsg, bot, multi)).start()
         if files <= 20:
-            msg = sendMessage(f"<b>Almost there, I'm  Cloning:</b>\n\n <code>{link}</code> \n\n <b>Your Drive Link is Ready!</b>", bot, message)
+            msg = sendMessage(f"<b>Almost there, As I'm  Cloning the following Link :</b>\n\n <code>{link}</code> \n\n <b>Wohoo!! Your Drive Link is Ready!</b>", bot, message)
             result, button = gd.clone(link)
             deleteMessage(bot, msg)
         else:
@@ -120,7 +120,7 @@ def _clone(message, bot, multi=0):
                     update_all_messages()
             except IndexError:
                 pass
-        cc = f'\n\n<b>Credits : </b>{tag}'
+        cc = f'\n\n<b>Cloned By : </b>{tag}'
         if button in ["cancelled", ""]:
             sendMessage(f"{tag} {result}", bot, message)
         else:
