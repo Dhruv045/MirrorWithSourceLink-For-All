@@ -13,7 +13,7 @@ from telegram import InlineKeyboardMarkup, InlineKeyboardButton, ParseMode
 
 from bot import bot, Interval, INDEX_URL, BUTTON_FOUR_NAME, BUTTON_FOUR_URL, BUTTON_FIVE_NAME, BUTTON_FIVE_URL, \
                 BUTTON_SIX_NAME, BUTTON_SIX_URL, VIEW_LINK, aria2, QB_SEED, MIRROR_LOGS, BOT_PM, dispatcher, DOWNLOAD_DIR, \
-                download_dict, download_dict_lock, SOURCE_LINK, TG_SPLIT_SIZE, LOGGER, MEGA_KEY, DB_URI, INCOMPLETE_TASK_NOTIFIER, TITLE_NAME, LEECH_LOG
+                download_dict, download_dict_lock, SOURCE_LINK, TG_SPLIT_SIZE, LOGGER, MEGA_KEY, DB_URI, INCOMPLETE_TASK_NOTIFIER, TITLE_NAME, LEECH_LOG, CMD_INDEX
 from bot.helper.ext_utils.bot_utils import is_url, is_magnet, is_gdtot_link, is_mega_link, is_gdrive_link, get_content_type, get_readable_time
 from bot.helper.ext_utils.fs_utils import get_base_name, get_path_size, split_file, clean_download
 from bot.helper.ext_utils.shortenurl import short_url
@@ -183,7 +183,7 @@ class MirrorListener:
             except Exception as e:
                 LOGGER.error(str(e))
             count = len(download_dict)
-        msg = f"Sorry {self.tag} but your download has been stopped due to: \n{error} ! Better Luck next time!  #{error}"
+        msg = f"Hey {self.tag} your download has been stopped due to: \n{error} \n Better Luck next time! \n\n #{error}"
         sendMessage(msg, self.bot, self.message)
         if count == 0:
             self.clean()
@@ -224,7 +224,7 @@ class MirrorListener:
                             source_link = reply_text.strip()
                             if is_magnet(source_link):
                                 link = telegraph.create_page(
-                                    title='Helios-Mirror Source Link',
+                                    title='Dhruv-Mirror Source Link',
                                     content=source_link,
                                 )["path"]
                                 buttons.buildbutton(f"🔗 Source Link 🔗", f"https://telegra.ph/{link}")
@@ -241,9 +241,8 @@ class MirrorListener:
             msg += f'\n<b>Total Files: </b>{folders}'
             if typ != 0:
                 msg += f'\n<b>Corrupted Files: </b>{typ}'
-            msg += f'\n\n<b>Hey </b>{self.tag} <b>Your task is Completed. Join Leech Dump if you want access to the file.</b>'
-            msg += f'\n\n<b>The FIle will be sent in PM Eventually</b>'
-            msg += f'\n<b>It Tooks:</b> {get_readable_time(time() - self.message.date.timestamp())}'
+            msg += f'\n\n<b>Hey </b>{self.tag} <b>Your task is Completed.</b? \n <b>Join Dump if you want access to the file.</b> \n\n <b>The File will be sent in PM Eventually.</b>'
+            msg += f'\n<b>It Took:</b> {get_readable_time(time() - self.message.date.timestamp())} <b>to Execute your task!</b>'
             msg += f'\n\n<b>Thank You For using {TITLE_NAME}! Keep Supporting & Keep Loving!</b>'
             if not files:
                 sendMessage(msg, self.bot, self.message)
@@ -269,12 +268,12 @@ class MirrorListener:
             if ospath.isdir(f'{DOWNLOAD_DIR}{self.uid}/{name}'):
                 msg += f'\n<b>SubFolders: </b>{folders}'
                 msg += f'\n<b>Files: </b>{files}'
-            msg += f'\n\n<b>Hey </b>{self.tag} <b>Your task is Completed. Join Dump if you want access to the file. The File will be sent in PM Eventually</b>'
-            msg += f'\n<b>It Took:</b> {get_readable_time(time() - self.message.date.timestamp())} to Complete your Task.!'
+            msg += f'\n\n<b>Hey </b>{self.tag} <b>Your task is Completed.</b? \n <b>Join Dump if you want access to the file.</b> \n\n <b>The File will be sent in PM Eventually.</b>'
+            msg += f'\n<b>It Took:</b> {get_readable_time(time() - self.message.date.timestamp())} <b>to Execute your task!</b>'
             msg += f'\n\n<b>Thank You For using {TITLE_NAME}! Keep Supporting & Keep Loving!</b>'
             buttons = ButtonMaker()
             link = short_url(link)
-            buttons.buildbutton("☁️ Drive Link ☁️", link)
+            buttons.buildbutton("Drive Link", link)
             LOGGER.info(f'Done Uploading {name}')
             if INDEX_URL is not None:
                 url_path = rutils.quote(f'{name}')
@@ -282,14 +281,14 @@ class MirrorListener:
                 if ospath.isdir(f'{DOWNLOAD_DIR}/{self.uid}/{name}'):
                     share_url += '/'
                     share_url = short_url(share_url)
-                    buttons.buildbutton("⚡ Index Link ⚡", share_url)
+                    buttons.buildbutton("Index Link", share_url)
                 else:
                     share_url = short_url(share_url)
-                    buttons.buildbutton("⚡ Index Link ⚡", share_url)
+                    buttons.buildbutton("Index Link", share_url)
                     if VIEW_LINK:
                         share_urls = f'{INDEX_URL}/{url_path}?a=view'
                         share_urls = short_url(share_urls)
-                        buttons.buildbutton("🌐 View Link 🌐", share_urls)
+                        buttons.buildbutton("View Link", share_urls)
             if BUTTON_FOUR_NAME is not None and BUTTON_FOUR_URL is not None:
                 buttons.buildbutton(f"{BUTTON_FOUR_NAME}", f"{BUTTON_FOUR_URL}")
             if BUTTON_FIVE_NAME is not None and BUTTON_FIVE_URL is not None:
@@ -492,7 +491,7 @@ def _mirror(bot, message, isZip=False, extract=False, isQbit=False, isLeech=Fals
                 link = file.get_file().file_path
 
     if not is_url(link) and not is_magnet(link) and not ospath.exists(link):
-        help_msg = "<b>Kindly Send Link With the Proper Command else Check help command! \n Or Watch others how to use me!</b>"
+        help_msg = f"<b>Kindly Send Link With the Proper Command else Check /help{CMD_INDEX} command! \n Or Watch others how to use me!</b>"
         return sendMessage(help_msg, bot, message)
 
     LOGGER.info(link)
